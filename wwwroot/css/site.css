@@ -1,0 +1,138 @@
+/* Import a clean, modern font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+/* =========================================
+   General Body & Layout
+========================================= */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa; /* Light gray background for most pages */
+}
+
+main {
+    padding-top: 72px; /* Default offset for fixed navbar */
+}
+
+.footer {
+    line-height: 60px;
+}
+
+/* =========================================
+   Navigation Bar
+========================================= */
+#main-navbar {
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Style for transparent navbar on homepage (initial state) */
+.navbar-transparent {
+    background-color: transparent !important;
+}
+
+    .navbar-transparent .nav-link,
+    .navbar-transparent .navbar-brand {
+        color: #fff !important;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .navbar-transparent .btn-outline-light {
+        border-color: #fff;
+        color: #fff;
+    }
+
+    /* Style for navbar when it becomes solid (on scroll or on other pages) */
+    .navbar-solid,
+    .navbar-transparent.scrolled {
+        background-color: #ffffff !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+        .navbar-solid .nav-link,
+        .navbar-solid .navbar-brand,
+        .navbar-transparent.scrolled .nav-link,
+        .navbar-transparent.scrolled .navbar-brand {
+            color: #333 !important;
+            text-shadow: none;
+        }
+
+        .navbar-solid .dropdown-menu {
+            background-color: #fff;
+        }
+
+        .navbar-solid .btn-outline-light,
+        .navbar-transparent.scrolled .btn-outline-light {
+            border-color: #0d6efd; /* Bootstrap primary blue */
+            color: #0d6efd;
+        }
+
+            .navbar-solid .btn-outline-light:hover,
+            .navbar-transparent.scrolled .btn-outline-light:hover {
+                background-color: #0d6efd;
+                color: #fff;
+            }
+
+/* =========================================
+   Homepage Hero Section
+========================================= */
+.hero-section {
+    padding-top: 72px;
+    height: 70vh; /* A good, modern height */
+    min-height: 500px;
+    width: 100%;
+    margin-top: -72px; /* Pulls hero up behind the navbar */
+    background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1560184897-ae75f418493e?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.hero-search-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px;
+}
+
+    .hero-search-card .nav-tabs {
+        border-bottom: none;
+    }
+
+    .hero-search-card .nav-link {
+        color: #555;
+        font-weight: 500;
+        border-radius: .25rem .25rem 0 0;
+    }
+
+        .hero-search-card .nav-link.active {
+            color: #0d6efd;
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+
+/* =========================================
+   Toast Notifications
+========================================= */
+.toast-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    background-color: #0d6efd; /* Primary blue */
+    color: white;
+    border-radius: 5px;
+    z-index: 1060;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+    .toast-message.error {
+        background-color: #dc3545; /* Red for error */
+    }
