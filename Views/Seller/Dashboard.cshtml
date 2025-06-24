@@ -1,0 +1,53 @@
+﻿@model EasyHousingSolution.Models.SellerDashboardViewModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Seller Dashboard";
+    var userName = Context.Session.GetString("UserName");
+}
+
+<div class="container mt-4">
+    <div class="content-card">
+    <div class="text-center mb-5">
+        <h1 class="display-5">Welcome, @userName!</h1>
+        <p class="lead text-muted">This is your dashboard. From here, you can manage all your property listings.</p>
+    </div>
+    <div class="row g-4 d-flex justify-content-center">
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <i class="fas fa-plus-circle fa-3x text-primary mb-3 mx-auto"></i>
+                    <h5 class="card-title text-center">Add New Property</h5>
+                    <p class="card-text text-muted text-center">List a new property for sale or rent. It will be sent to an administrator for verification.</p>
+                    <div class="mt-auto text-center">
+                        <a class="btn btn-primary" asp-action="AddProperty" asp-controller="Seller">
+                            Add Property
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <i class="fas fa-list-alt fa-3x text-info mb-3 mx-auto"></i>
+                    <h5 class="card-title text-center">Manage My Listings</h5>
+                    <p class="card-text text-muted text-center">View and manage your properties based on their verification status.</p>
+                    <div class="list-group list-group-flush mt-auto">
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-action="VerifiedProperties" asp-controller="Seller">
+                            View Verified Properties <span class="badge bg-success rounded-pill">@Model.VerifiedCount</span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-action="PendingProperties" asp-controller="Seller">
+                            View Pending Properties <span class="badge bg-warning rounded-pill">@Model.PendingCount</span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-action="DeactivatedProperties" asp-controller="Seller">
+                            View Deactivated Properties <span class="badge bg-danger rounded-pill">@Model.DeactivatedCount</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

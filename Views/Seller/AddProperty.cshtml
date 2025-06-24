@@ -1,0 +1,122 @@
+﻿@model EasyHousingSolution.Models.PropertyViewModel
+@{
+    ViewData["Title"] = "Add New Property";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">List a New Property</h2>
+    <p class="text-muted">Fill out the details below and upload images for your property. It will be submitted for verification by an administrator.</p>
+    <hr />
+
+    @* IMPORTANT: enctype="multipart/form-data" is required for file uploads *@
+    <form asp-action="AddProperty" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="PropertyName" class="form-label"></label>
+                    <input asp-for="PropertyName" class="form-control" />
+                    <span asp-validation-for="PropertyName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="PropertyType" class="form-label"></label>
+                    <input asp-for="PropertyType" class="form-control" />
+                    <span asp-validation-for="PropertyType" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="PropertyOption" class="form-label"></label>
+                    <select asp-for="PropertyOption" id="PropertyOption" class="form-select">
+                        <option value="">-- Select Option --</option>
+                        <option value="Sell">Sell</option>
+                        <option value="Rent">Rent</option>
+                    </select>
+                    <span asp-validation-for="PropertyOption" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3" id="initial-deposit-group" style="display: none;">
+                    <label asp-for="InitialDeposit" class="form-label"></label>
+                    <input asp-for="InitialDeposit" class="form-control" />
+                    <span asp-validation-for="InitialDeposit" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Address" class="form-label"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="Region" class="form-label"></label>
+                    <input asp-for="Region" class="form-control" />
+                    <span asp-validation-for="Region" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="Landmark" class="form-label"></label>
+                    <input asp-for="Landmark" class="form-control" />
+                    <span asp-validation-for="Landmark" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="PriceRange" class="form-label"></label>
+            <input asp-for="PriceRange" class="form-control" />
+            <span asp-validation-for="PriceRange" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="NewImages" class="form-label">Upload up to 6 images:</label>
+            <input asp-for="NewImages" type="file" multiple class="form-control" />
+            <span asp-validation-for="NewImages" class="text-danger"></span>
+        </div>
+
+
+        <hr />
+        <button type="submit" class="btn btn-primary">Submit for Verification</button>
+        <a asp-action="Dashboard" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            function toggleInitialDeposit() {
+                if ($('#PropertyOption').val() === 'Rent') {
+                    $('#initial-deposit-group').slideDown();
+                } else {
+                    $('#initial-deposit-group').slideUp();
+                    $('#InitialDeposit').val('');
+                }
+            }
+            toggleInitialDeposit();
+            $('#PropertyOption').change(function () {
+                toggleInitialDeposit();
+            });
+        });
+    </script>
+}

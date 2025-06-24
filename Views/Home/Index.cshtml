@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Find a Home You'll Love";
+    // This flag is crucial for the transparent navbar effect
+    ViewData["IsHomepage"] = true;
+}
+
+<!-- No container on the homepage to allow the hero to be full-width -->
+
+<div class="hero-section text-center">
+    <div class="mb-4">
+        <h1 class="display-5 fw-bold">Find a home you'll love</h1>
+        <p class="lead">Discover your perfect property with us.</p>
+    </div>
+
+    <div class="hero-search-card">
+        <!-- Navigation for Buy/Rent/Sell -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="buy-tab" data-bs-toggle="tab" data-bs-target="#buy-tab-pane" type="button" role="tab" aria-controls="buy-tab-pane" aria-selected="true">Buy</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="rent-tab" data-bs-toggle="tab" data-bs-target="#rent-tab-pane" type="button" role="tab" aria-controls="rent-tab-pane" aria-selected="false">Rent</button>
+            </li>
+        </ul>
+
+        <!-- Search Forms -->
+        <div class="tab-content p-3 bg-white border border-top-0 rounded-bottom">
+            <!-- Buy Search Form -->
+            <div class="tab-pane fade show active" id="buy-tab-pane" role="tabpanel" aria-labelledby="buy-tab">
+                <form asp-action="Search" asp-controller="Buyer" method="get">
+                    <div class="input-group">
+                        <input type="text" name="region" class="form-control form-control-lg" placeholder="Enter a city, e.g., 'Pune'">
+                        <input type="hidden" name="propertyOption" value="Sell" />
+                        <button class="btn btn-primary btn-lg" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <!-- Rent Search Form -->
+            <div class="tab-pane fade" id="rent-tab-pane" role="tabpanel" aria-labelledby="rent-tab">
+                <form asp-action="Search" asp-controller="Buyer" method="get">
+                    <div class="input-group">
+                        <input type="text" name="region" class="form-control form-control-lg" placeholder="Enter a city, e.g., 'Bengaluru'">
+                        <input type="hidden" name="propertyOption" value="Rent" />
+                        <button class="btn btn-primary btn-lg" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    <!-- You can add other sections like "Featured Properties" or "Why Choose Us" here -->
+    <h2 class="text-center fw-bold mb-5">Explore Homes on Easy Housing</h2>
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="p-4 h-100">
+                <i class="fas fa-search-location fa-3x text-primary mb-3"></i>
+                <h5 class="fw-bold">Easy Search</h5>
+                <p class="text-muted">Find homes quickly with our user-friendly tools.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 h-100">
+                <i class="fas fa-heart fa-3x text-primary mb-3"></i>
+                <h5 class="fw-bold">Verified Listings</h5>
+                <p class="text-muted">Only the best and most trusted properties.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 h-100">
+                <i class="fas fa-comments fa-3x text-primary mb-3"></i>
+                <h5 class="fw-bold">24/7 Support</h5>
+                <p class="text-muted">We’re here for you whenever you need us.</p>
+            </div>
+        </div>
+    </div>
+</div>

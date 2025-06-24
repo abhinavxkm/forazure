@@ -1,0 +1,103 @@
+﻿@model List<EasyHousingSolution.Models.Property>
+@using System.Globalization
+@{
+    ViewData["Title"] = "Search Properties";
+}
+
+<div class="container mt-4">
+
+    <h2><i class="fas fa-search"></i> Search Properties</h2>
+    <hr />
+
+    <form method="get" asp-action="Search" class="mb-4 p-3 border rounded bg-light">
+        @Html.AntiForgeryToken()
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Region</label>
+                <input type="text" name="region" placeholder="e.g., Pune" class="form-control" value="@Context.Request.Query["region"]" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Property Type</label>
+                <input type="text" name="type" placeholder="e.g., Apartment" class="form-control" value="@Context.Request.Query["type"]" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Sort By</label>
+                <select name="sortOrder" class="form-select">
+                    <option value="name" selected="@(Context.Request.Query["sortOrder"] == "name")">Name</option>
+                    <option value="price" selected="@(Context.Request.Query["sortOrder"] == "price")">Price</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <form asp-action="Compare" asp-controller="Buyer" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+            <h4>Search Results</h4>
+            <div>
+                <button type="submit" class="btn btn-info">
+                    <i class="fas fa-exchange-alt"></i> Compare Selected (2)
+                </button>
+            </div>
+        </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-warning">@TempData["ErrorMessage"]</div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info">No matching properties found. Please try different search criteria.</div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">Compare</th>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Option</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <div class="form-check d-flex justify-content-center">
+                                        <input type="checkbox" class="form-check-input" name="ids" value="@item.PropertyId" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>@item.PropertyName</strong><br />
+                                    <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>@item.Address</small>
+                                </td>
+                                <td>@item.PropertyType</td>
+                                <td>@item.PropertyOption</td>
+                                <td class="fw-bold">@item.PriceRange.ToString("C", new CultureInfo("en-IN"))</td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary" asp-action="PropertyDetails" asp-controller="Buyer" asp-route-id="@item.PropertyId">
+                                        View Details
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-success add-to-cart-btn" data-property-id="@item.PropertyId">
+                                        Add to Cart
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </form>
+</div>
+

@@ -1,0 +1,48 @@
+﻿@model EasyHousingSolution.Models.BuyerDashboardViewModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Buyer Dashboard";
+    var userName = Context.Session.GetString("UserName");
+}
+
+<div class="container mt-4">
+    <div class="content-card">
+    <div class="text-center mb-5">
+        <h1 class="display-5">Welcome, @userName!</h1>
+        <p class="lead text-muted">This is your dashboard. From here, you can search for properties and manage your saved items.</p>
+    </div>
+    <div class="row g-4 d-flex justify-content-center">
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <i class="fas fa-search fa-3x text-primary mb-3 mx-auto"></i>
+                    <h5 class="card-title text-center">Find a Property</h5>
+                    <p class="card-text text-muted text-center">Browse all of our active listings. Search by region and property type to find your perfect home.</p>
+                    <div class="mt-auto text-center">
+                        <a class="btn btn-primary" asp-action="Search" asp-controller="Buyer">
+                            Search Properties
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <i class="fas fa-shopping-cart fa-3x text-info mb-3 mx-auto"></i>
+                    <h5 class="card-title text-center">My Cart</h5>
+                    <p class="card-text text-muted text-center">View the properties you have saved for future reference. You have <strong>@Model.CartItemCount</strong> item(s) in your cart.</p>
+                    <div class="mt-auto text-center">
+                        <a class="btn btn-info" asp-action="ViewCart" asp-controller="Buyer">
+                            View My Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>

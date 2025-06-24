@@ -1,0 +1,50 @@
+﻿@model EasyHousingSolution.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+    // This tells the _Layout file to hide the header and footer
+    ViewData["IsFullPage"] = true;
+}
+
+<div class="login-page-container">
+    <div class="login-content">
+        <!-- Logo / Link back to Home -->
+        <a asp-controller="Home" asp-action="Index" class="login-logo mb-5">EASY HOUSING</a>
+
+        <!-- Translucent Login Box -->
+        <div class="login-box">
+            <form asp-controller="Login" asp-action="Login" method="post">
+                <h2 class="h3 mb-4 fw-bold text-white text-center">Sign in to your account</h2>
+
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- Username Input -->
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input asp-for="UserName" class="form-control form-control-lg" placeholder="Username" required>
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-group mb-4">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input asp-for="Password" class="form-control form-control-lg" placeholder="Password" required>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-danger btn-lg w-100">Sign In</button>
+
+                <!-- Registration Link -->
+                <p class="text-center text-light mt-4">
+                    Don't have an account?
+                    <a asp-controller="Registration" asp-action="Register" class="fw-bold text-white">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

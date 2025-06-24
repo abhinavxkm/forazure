@@ -1,0 +1,79 @@
+﻿@model List<EasyHousingSolution.Models.Property>
+@using System.Globalization
+@{
+    ViewData["Title"] = "My Pending Properties";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="fas fa-clock text-warning me-2"></i>My Pending Properties</h2>
+    <p>This page shows all of your properties that are currently awaiting verification by an administrator.</p>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info mt-3">
+            You do not have any properties pending verification.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Image</th>
+                        <th>Property Name</th>
+                        <th>Type</th>
+                        <th>Option</th>
+                        <th>Price / Rent</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (item.Images != null && item.Images.Any())
+                                {
+                                    <img src="@Url.Action("Get", "Image", new { id = item.Images.First().ImageId })" class="img-thumbnail" style="width: 100px; height: 70px; object-fit: cover;" alt="@item.PropertyName" />
+                                }
+                                else
+                                {
+                                    <div class="bg-light d-flex justify-content-center align-items-center" style="width: 100px; height: 70px;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <strong>@item.PropertyName</strong><br />
+                                <small class="text-muted">@item.Address</small>
+                            </td>
+                            <td>@item.PropertyType</td>
+                            <td>@item.PropertyOption</td>
+                            <td class="fw-bold">@item.PriceRange.ToString("C", new CultureInfo("en-IN"))</td>
+                            <td class="text-center">
+                                <span class="badge bg-warning text-dark">Pending Approval</span>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="EditProperty" asp-route-id="@item.PropertyId" class="btn btn-sm btn-warning" title="Edit Property">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a asp-action="UploadImages" asp-route-id="@item.PropertyId" class="btn btn-sm btn-info" title="Manage Images">
+                                    <i class="fas fa-camera"></i> Images
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-action="Dashboard" asp-controller="Seller" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>

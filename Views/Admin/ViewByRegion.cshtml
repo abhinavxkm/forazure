@@ -1,0 +1,31 @@
+﻿@model List<EasyHousingSolution.Models.Property>
+
+@{
+    ViewData["Title"] = "Properties by Region";
+}
+
+<h2>Properties in @ViewBag.Region</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Option</th>
+            <th>Price</th>
+            <th>Landmark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var property in Model)
+        {
+            <tr>
+                <td>@property.PropertyName</td>
+                <td>@property.PropertyType</td>
+                <td>@property.PropertyOption</td>
+                <td>@property.PriceRange</td>
+                <td>@property.Landmark</td>
+            </tr>
+        }
+    </tbody>
+</table>

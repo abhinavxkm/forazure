@@ -1,0 +1,35 @@
+﻿@model EasyHousingSolution.Models.Property
+
+@{
+    ViewData["Title"] = "Deactivate Property";
+}
+
+<h2><i class="fas fa-times-circle text-danger"></i> Deactivate Property</h2>
+<hr />
+
+<div class="alert alert-warning">
+    You are about to deactivate the property: <strong>@Model.PropertyName</strong>.
+    <br />
+    This will remove it from public search results. Please provide a reason below.
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Deactivate" method="post">
+            @Html.AntiForgeryToken()
+
+            @* This hidden input sends the PropertyId back to the controller *@
+            <input type="hidden" name="propertyId" value="@Model.PropertyId" />
+
+            <div class="form-group">
+                <label for="reason" class="control-label">Reason for Deactivation</label>
+                <textarea name="reason" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-danger">Confirm Deactivation</button>
+                <a asp-action="PendingProperties" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

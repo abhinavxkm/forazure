@@ -1,0 +1,113 @@
+﻿@model List<EasyHousingSolution.Models.CartViewModel>
+@using System.Globalization
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="fas fa-shopping-cart me-2"></i>Your Saved Properties</h2>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="text-center">
+            <p class="lead">Your cart is empty.</p>
+            <a asp-action="Search" asp-controller="Buyer" class="btn btn-primary">Find Properties</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Image</th>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Option</th>
+                        <th>Price</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (item.FirstImageId.HasValue)
+                                {
+                                    <img src="@Url.Action("Get", "Image", new { id = item.FirstImageId.Value })" class="img-thumbnail" style="width: 100px; height: 70px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <div class="bg-light d-flex justify-content-center align-items-center" style="width: 100px; height: 70px;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>@item.PropertyName</td>
+                            <td>@item.PropertyType</td>
+                            <td>@item.PropertyOption</td>
+                            <td class="fw-bold">@item.PriceRange.ToString("C", new CultureInfo("en-IN"))</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-outline-primary" asp-action="PropertyDetails" asp-route-id="@item.PropertyId">Details</a>
+
+
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal"
+                                        data-cart-id="@item.CartId">
+                                    Remove
+                                </button>
+
+                                <form asp-action="RemoveFromCart" method="post" id="form-@item.CartId" class="d-none">
+                                    <input type="hidden" name="cartId" value="@item.CartId" />
+                                    @Html.AntiForgeryToken()
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to remove this property from your cart?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Yes, Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var cartIdToDelete;
+
+            // When a "Remove" button is clicked, store its cartId for the modal
+            $('.delete-btn').on('click', function () {
+                cartIdToDelete = $(this).data('cart-id');
+            });
+
+            // When the "Yes, Remove" button inside the modal is clicked, submit the correct form
+            $('#confirmDeleteButton').on('click', function () {
+                var form = $('#form-' + cartIdToDelete);
+                if(form) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+}

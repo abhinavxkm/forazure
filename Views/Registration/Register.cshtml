@@ -1,0 +1,213 @@
+﻿@model EasyHousingSolution.Models.RegistrationViewModel
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="login-page-container">
+    <div class="login-content">
+        <a asp-controller="Home" asp-action="Index" class="login-logo mb-4">EASY HOUSING</a>
+
+        <div class="login-box" style="max-width: 600px;">
+            <form asp-action="Register" method="post" id="registrationForm">
+                <h2 class="h3 mb-4 fw-bold text-white text-center">Create Your Account</h2>
+
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-step active" id="step-1">
+                    <h5 class="text-light text-center mb-4">Step 1: Account Details</h5>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input asp-for="UserName" class="form-control" placeholder="Username" />
+                        </div>
+                        <span asp-validation-for="UserName" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input asp-for="Password" class="form-control" placeholder="Password" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger d-block"></span>
+                    </div>
+                </div>
+
+                <div class="form-step" id="step-2">
+                    <h5 class="text-light text-center mb-4">Step 2: Personal Information</h5>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                        </div>
+                        <span asp-validation-for="FirstName" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            <input asp-for="LastName" class="form-control" placeholder="Last Name (Optional)" />
+                        </div>
+                        <span asp-validation-for="LastName" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <input asp-for="DateOfBirth" class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="Date of Birth" />
+                        </div>
+                        <span asp-validation-for="DateOfBirth" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input asp-for="EmailId" class="form-control" placeholder="Email Address" />
+                        </div>
+                        <span asp-validation-for="EmailId" class="text-danger d-block"></span>
+                    </div>
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input asp-for="PhoneNo" class="form-control" placeholder="Phone Number" />
+                        </div>
+                        <span asp-validation-for="PhoneNo" class="text-danger d-block"></span>
+                    </div>
+                </div>
+
+                <div class="form-step" id="step-3">
+                    <h5 class="text-light text-center mb-4">Step 3: Role & Address</h5>
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                            <select asp-for="UserType" id="UserType" class="form-select">
+                                <option value="">Register as...</option>
+                                <option value="Buyer">Buyer</option>
+                                <option value="Seller">Seller</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="UserType" class="text-danger d-block"></span>
+                    </div>
+                    <div id="seller-fields" style="display: none;">
+                        <p class="text-center text-info small mb-3">Address is required for Sellers.</p>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                <input asp-for="Address" class="form-control" placeholder="Full Address" />
+                            </div>
+                            <span asp-validation-for="Address" class="text-danger d-block"></span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-map"></i></span>
+                                <select asp-for="StateId" id="StateId" class="form-select" asp-items="Model.States">
+                                    <option value="">-- Select State --</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="StateId" class="text-danger d-block"></span>
+                        </div>
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                <select asp-for="CityId" id="CityId" class="form-select" asp-items="Model.Cities" disabled>
+                                    <option value="">-- Select City --</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="CityId" class="text-danger d-block"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
+                    <button type="button" class="btn btn-info" id="nextBtn">Next</button>
+                    <button type="submit" class="btn btn-danger" id="submitBtn" style="display: none;">Create Account</button>
+                </div>
+
+                <p class="text-center text-sm text-light mt-4">
+                    Already have an account?
+                    <a asp-controller="Login" asp-action="Login" class="fw-bold text-white">Sign In</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Your existing multi-step JS is great, no changes needed there.
+            let currentStep = 1;
+            const formSteps = $('.form-step');
+            const nextBtn = $('#nextBtn');
+            const prevBtn = $('#prevBtn');
+            const submitBtn = $('#submitBtn');
+
+            function updateButtons() {
+                if (currentStep > 1) { prevBtn.show(); }
+                else { prevBtn.hide(); }
+
+                if (currentStep === formSteps.length) {
+                    nextBtn.hide();
+                    submitBtn.show();
+                } else {
+                    nextBtn.show();
+                    submitBtn.hide();
+                }
+            }
+
+            nextBtn.on('click', function () {
+                if (currentStep < formSteps.length) {
+                    // Check if the current step is valid before proceeding
+                    var form = $('#registrationForm');
+                    if (form.valid()) {
+                        $('#step-' + currentStep).removeClass('active');
+                        currentStep++;
+                        $('#step-' + currentStep).addClass('active');
+                        updateButtons();
+                    }
+                }
+            });
+
+            prevBtn.on('click', function () {
+                if (currentStep > 1) {
+                    $('#step-' + currentStep).removeClass('active');
+                    currentStep--;
+                    $('#step-' + currentStep).addClass('active');
+                    updateButtons();
+                }
+            });
+
+            updateButtons();
+
+            // --- Your existing logic for seller fields and city dropdowns ---
+            $('#UserType').change(function () {
+                if ($(this).val() === 'Seller') { $('#seller-fields').slideDown(); }
+                else { $('#seller-fields').slideUp(); }
+            });
+
+            $('#StateId').change(function () {
+                var selectedStateId = $(this).val();
+                var cityDropdown = $('#CityId');
+                cityDropdown.empty().append($('<option></option>').val('').text('-- Select City --')).prop('disabled', true);
+
+                if (selectedStateId) {
+                     $.getJSON('@Url.Action("GetCitiesByState", "Registration")', { stateId: selectedStateId }, function (cities) {
+                         if (cities && cities.length > 0) {
+                             cityDropdown.prop('disabled', false);
+                             $.each(cities, function (i, city) {
+                                 cityDropdown.append($('<option></option>').val(city.value).text(city.text));
+                             });
+                         }
+                     });
+                }
+            });
+        });
+    </script>
+}

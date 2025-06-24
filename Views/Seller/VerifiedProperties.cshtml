@@ -1,0 +1,62 @@
+﻿@model List<EasyHousingSolution.Models.Property>
+@using System.Globalization
+@{
+    ViewData["Title"] = "Verified Properties";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Your Verified Properties</h2>
+    <p>These properties are live and visible to buyers on the website.</p>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">You do not have any verified properties at the moment.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Image</th>
+                        <th>Property Name</th>
+                        <th>Type</th>
+                        <th>Option</th>
+                        <th>Price</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (item.Images != null && item.Images.Any())
+                                {
+                                    <img src="@Url.Action("Get", "Image", new { id = item.Images.First().ImageId })" class="img-thumbnail" style="width: 100px; height: 70px; object-fit: cover;" alt="@item.PropertyName" />
+                                }
+                                else
+                                {
+                                    <div class="bg-light d-flex justify-content-center align-items-center" style="width: 100px; height: 70px;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>@item.PropertyName</td>
+                            <td>@item.PropertyType</td>
+                            <td>@item.PropertyOption</td>
+                            <td>@item.PriceRange.ToString("C", new CultureInfo("en-IN"))</td>
+                            <td class="text-center">
+                                @* This is now the single button to manage the property *@
+                                <a asp-action="EditProperty" asp-route-id="@item.PropertyId" class="btn btn-sm btn-warning" title="Edit Details & Images">
+                                    <i class="fas fa-edit"></i> Edit / Manage Images
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

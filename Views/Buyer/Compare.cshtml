@@ -1,0 +1,122 @@
+﻿@model List<EasyHousingSolution.Models.Property>
+@using System.Globalization
+@{
+    ViewData["Title"] = "Compare Properties";
+}
+
+<div class="container mt-4">
+    <h2><i class="fas fa-exchange-alt"></i> Property Comparison</h2>
+    <p class="text-muted">Here is a side-by-side comparison of your selected properties.</p>
+    <hr />
+
+    @if (Model != null && Model.Count == 2)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered comparison-table">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 20%;">Feature</th>
+                        <th style="width: 40%;" class="text-center">@Model[0].PropertyName</th>
+                        <th style="width: 40%;" class="text-center">@Model[1].PropertyName</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Image</strong></td>
+                        <td class="text-center">
+                            @if (Model[0].Images != null && Model[0].Images.Any())
+                            {
+                                <img src="@Url.Action("Get", "Image", new { id = Model[0].Images.First().ImageId })" class="img-fluid rounded" alt="@Model[0].PropertyName" />
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (Model[1].Images != null && Model[1].Images.Any())
+                            {
+                                <img src="@Url.Action("Get", "Image", new { id = Model[1].Images.First().ImageId })" class="img-fluid rounded" alt="@Model[1].PropertyName" />
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Price / Rent</strong></td>
+                        <td>@Model[0].PriceRange.ToString("C", new CultureInfo("en-IN"))</td>
+                        <td>@Model[1].PriceRange.ToString("C", new CultureInfo("en-IN"))</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Listing Type</strong></td>
+                        <td>@Model[0].PropertyOption</td>
+                        <td>@Model[1].PropertyOption</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Property Type</strong></td>
+                        <td>@Model[0].PropertyType</td>
+                        <td>@Model[1].PropertyType</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address</strong></td>
+                        <td>@Model[0].Address</td>
+                        <td>@Model[1].Address</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Description</strong></td>
+                        <td>@Model[0].Description</td>
+                        <td>@Model[1].Description</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Initial Deposit</strong></td>
+                        <td>@(Model[0].PropertyOption == "Rent" ? Model[0].InitialDeposit?.ToString("C", new CultureInfo("en-IN")) : "N/A")</td>
+                        <td>@(Model[1].PropertyOption == "Rent" ? Model[1].InitialDeposit?.ToString("C", new CultureInfo("en-IN")) : "N/A")</td>
+                    </tr>
+                    <tr class="table-light">
+                        <td><strong>Actions</strong></td>
+                        <td class="text-center">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="PropertyDetails" asp-route-id="@Model[0].PropertyId">View Details</a>
+                            <button type="button" class="btn btn-sm btn-outline-success add-to-cart-btn" data-property-id="@Model[0].PropertyId">Add to Cart</button>
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="PropertyDetails" asp-route-id="@Model[1].PropertyId">View Details</a>
+                            <button type="button" class="btn btn-sm btn-outline-success add-to-cart-btn" data-property-id="@Model[1].PropertyId">Add to Cart</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">Something went wrong. Please go back to the search page and select exactly two properties to compare.</div>
+    }
+
+    <a asp-action="Search" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Back to Search</a>
+</div>
+
+@section Scripts {
+    <script>
+        // Using the same AJAX script for "Add to Cart"
+        $(document).ready(function () {
+            $('.add-to-cart-btn').on('click', function (e) {
+                e.preventDefault();
+                var button = $(this);
+                var propertyId = button.data('property-id');
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddToCart", "Buyer")",
+                    data: { propertyId: propertyId },
+                    headers: { "RequestVerificationToken": token },
+                    success: function (response) {
+                        if (response.success) {
+                            button.text('Added!').removeClass('btn-outline-success').addClass('btn-success').prop('disabled', true);
+                            alert(response.message);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while adding to the cart.");
+                    }
+                });
+            });
+        });
+    </script>
+}

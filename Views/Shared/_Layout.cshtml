@@ -1,0 +1,99 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    // This logic checks a flag from the View to decide the navbar style
+    var isHomepage = ViewData["IsHomepage"] as bool? ?? false;
+    var navClass = isHomepage ? "navbar-transparent" : "navbar-solid";
+
+    var userType = Context.Session.GetString("UserType");
+    var userName = Context.Session.GetString("UserName");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Easy Housing Solution</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark fixed-top p-3 @navClass">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-4" asp-controller="Home" asp-action="Index">EASY HOUSING</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-lg-inline-flex">
+                    <ul class="navbar-nav ms-auto">
+                        @if (string.IsNullOrEmpty(userName))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Registration" asp-action="Register">Sign Up</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light" asp-controller="Login" asp-action="Login">Sign In</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i> @userName
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    @if (userType == "Buyer")
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Buyer" asp-action="Dashboard">My Dashboard</a></li>
+                                    }
+                                    @if (userType == "Seller")
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Seller" asp-action="Dashboard">My Dashboard</a></li>
+                                    }
+                                    @if (userType == "Admin")
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a></li>
+                                    }
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-action="Logout" asp-controller="Login" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                            @if (userType == "Buyer")
+                            {
+                                <li class="nav-item ms-2">
+                                    <a class="nav-link position-relative" asp-controller="Buyer" asp-action="ViewCart" title="View Cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @* The container is now inside individual views for more layout control *@
+        @RenderBody()
+    </main>
+
+    <footer class="border-top footer bg-white text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - Easy Housing Solution - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
